@@ -1,4 +1,4 @@
-from paramiko import client
+from paramiko import client,RSAKey
 from config import *
 import time
 import paramiko
@@ -32,14 +32,16 @@ def running_exec_command(device):
     print(stderr.read().decode())
 
 def ssh_exec_command(device):
-    # try:
+    key_file=RSAKey.from_private_key_file(filename=FILE_NAME)
+    try:
         ssh_client=client.SSHClient()
         ssh_client.set_missing_host_key_policy(client.AutoAddPolicy())
         ssh_client.connect(hostname=device,
                            port=PORT,
                            username=USERNANE,
+                           pkey=key_file,
                            look_for_keys=True,allow_agent=True,disabled_algorithms=dict(pubkeys=['rsa-sha2-512', 'rsa-sha2-256']))
         stdin,stdout,stderr=ssh_client.exec_command('sh run')
         print(stdout.read().decode())
-    # except:
-        # print('Not connected')
+    except:
+        print('Not connected')

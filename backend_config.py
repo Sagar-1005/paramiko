@@ -2,6 +2,7 @@ from paramiko import client,RSAKey
 from config import *
 import time
 import difflib
+import webbrowser
 # import paramiko
 # paramiko.util.log_to_file('paramiko.log',level='DEBUG')
 
@@ -60,12 +61,15 @@ def config_compare(comp_with,comp_to,html_normal):
         print(delta)
         for data in delta:
             print(data)
-    elif int(html_normal)=='html':
+    elif html_normal=='html':
         with open(comp_with) as file:
-            previous_config=file.read()
+            previous_config=file.readlines()
         with open(comp_to) as file:
-            new_config=file.read()
-        delta=difflib.Differ().compare(previous_config.splitlines(),new_config.splitlines())
-        print(delta)
-        for data in delta:
-            print(data)
+            new_config=file.readlines()
+        config_compare=difflib.HtmlDiff().make_file(fromlines=previous_config,
+                                                    tolines=new_config,
+                                                    fromdesc='previous_config',
+                                                    todesc='newconfig')
+        with open('diff.html','w') as file:
+            file.write(config_compare)
+        webbrowser.open_new_tab('diff.html')

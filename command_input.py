@@ -6,8 +6,13 @@ def main():
     parser.add_argument('--host',help='Enter host details',default=None)
     parser.add_argument('--operation',help='selct operation',default='running')
     parser.add_argument('--mode',help='Mode invoke_shell or exec_command',default='invoke_shell')
+    parser.add_argument('--diff',help='back_up_config',default='backup')
+    parser.add_argument('--comp_with')
+    parser.add_argument('--comp_to')
     args=parser.parse_args()
-    if args.operation.lower()=='running' and args.mode.lower()=='invoke_shell':
+    if args.diff=='backup':
+        config_compare(args.comp_with,args.comp_to)
+    elif args.operation.lower()=='running' and args.mode.lower()=='invoke_shell':
         running_invoke_shell_config(args.host)
     elif args.operation.lower()=='running' and args.mode.lower()=='exec_command':
         running_exec_command(args.host)

@@ -1,8 +1,9 @@
 from paramiko import client,RSAKey
 from config import *
 import time
-import paramiko
-paramiko.util.log_to_file('paramiko.log',level='DEBUG')
+import difflib
+# import paramiko
+# paramiko.util.log_to_file('paramiko.log',level='DEBUG')
 
 def running_invoke_shell_config(device):
     ssh_client=client.SSHClient()
@@ -13,9 +14,12 @@ def running_invoke_shell_config(device):
                        password=PASSWORD,
                        look_for_keys=False, allow_agent=False)
     device_connection=ssh_client.invoke_shell()
+    device_connection.send('terminal len 0\n')
     device_connection.send('sh run \n')
-    time.sleep(15)
+    time.sleep(30)
     output=device_connection.recv(65535)   
+    with open('previous_backup.txt','a') as file:
+        file.write(output.decode())
     print(output.decode())
     
 
@@ -45,3 +49,13 @@ def ssh_exec_command(device):
         print(stdout.read().decode())
     except:
         print('Not connected')
+
+def config_compare(comp_with,comp_to):
+    with open(comp_with) as file:
+        previous_config=file.read()
+    with open(comp_to) as file:
+        new_config=file.read()
+    delta=difflib.Differ().compare(previous_config.splitlines(),new_config.splitlines())
+    print(delta)
+    for data in delta:
+        print(data)

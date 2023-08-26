@@ -50,12 +50,22 @@ def ssh_exec_command(device):
     except:
         print('Not connected')
 
-def config_compare(comp_with,comp_to):
-    with open(comp_with) as file:
-        previous_config=file.read()
-    with open(comp_to) as file:
-        new_config=file.read()
-    delta=difflib.Differ().compare(previous_config.splitlines(),new_config.splitlines())
-    print(delta)
-    for data in delta:
-        print(data)
+def config_compare(comp_with,comp_to,html_normal):
+    if html_normal=='normal':
+        with open(comp_with) as file:
+            previous_config=file.read()
+        with open(comp_to) as file:
+            new_config=file.read()
+        delta=difflib.Differ().compare(previous_config.splitlines(),new_config.splitlines())
+        print(delta)
+        for data in delta:
+            print(data)
+    elif int(html_normal)=='html':
+        with open(comp_with) as file:
+            previous_config=file.read()
+        with open(comp_to) as file:
+            new_config=file.read()
+        delta=difflib.Differ().compare(previous_config.splitlines(),new_config.splitlines())
+        print(delta)
+        for data in delta:
+            print(data)

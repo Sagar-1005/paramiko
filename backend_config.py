@@ -21,10 +21,10 @@ def running_invoke_shell_config(device):
     )
     device_connection = ssh_client.invoke_shell()
     device_connection.send("terminal len 0\n")
-    device_connection.send("sh run \n")
+    device_connection.send("show version \n")
     time.sleep(30)
     output = device_connection.recv(65535)
-    with open("previous_backup.txt", "a") as file:
+    with open("show_ver.txt", "a") as file:
         file.write(output.decode())
     print(output.decode())
 

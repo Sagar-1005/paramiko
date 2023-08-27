@@ -14,7 +14,7 @@ def main():
     parser.add_argument(
         "--mode", help="Mode invoke_shell or exec_command", default="invoke_shell"
     )
-    parser.add_argument("--diff", help="back_up_config", default="backup")
+    parser.add_argument("--diff", help="back_up_config")
     parser.add_argument("--comp_with")
     parser.add_argument("--comp_to")
     parser.add_argument("--html_normal")
